@@ -182,7 +182,7 @@ export default function PasswordReset() {
         <ul className="text-xs text-gray-600 mt-1 space-y-1 list-disc list-inside">
           <li>Use at least 6 characters</li>
           <li>Mix letters, numbers, and symbols</li>
-          <li>Don't reuse passwords from other sites</li>
+          <li>Don&apos;t reuse passwords from other sites</li>
         </ul>
       </div>
     </div>

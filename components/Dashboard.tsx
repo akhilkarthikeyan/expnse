@@ -1,7 +1,7 @@
 'use client';
 
 import { Expense, Category, Currency } from '@/types';
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
 import {
   PieChart,
   Pie,
@@ -27,7 +27,10 @@ interface DashboardProps {
 }
 
 export default function Dashboard({ expenses, categories, currency }: DashboardProps) {
-  const getCategoryById = (id: string) => categories.find((cat) => cat.id === id);
+  const getCategoryById = useCallback(
+    (id: string) => categories.find((cat) => cat.id === id),
+    [categories]
+  );
 
   // Calculate total expenses
   const totalExpenses = useMemo(() => {
@@ -81,7 +84,7 @@ export default function Dashboard({ expenses, categories, currency }: DashboardP
         };
       })
       .sort((a, b) => b.value - a.value);
-  }, [expenses, categories]);
+  }, [expenses, getCategoryById]);
 
   // Daily expenses for last 30 days
   const dailyExpenses = useMemo(() => {
