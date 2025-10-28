@@ -9,7 +9,16 @@ let sql: any;
 if (isProduction) {
   // Use Neon Postgres in production (compatible with @vercel/postgres)
   const { neon } = require('@neondatabase/serverless');
-  sql = neon(process.env.DATABASE_URL!);
+  const databaseUrl = process.env.DATABASE_URL || process.env.POSTGRES_URL;
+  
+  if (!databaseUrl) {
+    throw new Error(
+      'DATABASE_URL is not set. Please add your Neon database connection string to Vercel environment variables. ' +
+      'Go to Vercel Dashboard → Your Project → Settings → Environment Variables → Add DATABASE_URL'
+    );
+  }
+  
+  sql = neon(databaseUrl);
 } else {
   // Use SQLite for local development
   const Database = require('better-sqlite3');
