@@ -190,7 +190,12 @@ export const expenseDb = {
       const result = await sql`
         SELECT * FROM expenses WHERE user_id = ${userId} ORDER BY date DESC
       `;
-      return result;
+      // Convert amount from string to number (Postgres DECIMAL returns as string)
+      return result.map((expense: any) => ({
+        ...expense,
+        amount: parseFloat(expense.amount),
+        user_id: parseInt(expense.user_id)
+      }));
     } else {
       const stmt = db.prepare('SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC');
       return stmt.all(userId);
