@@ -91,7 +91,63 @@ export default function Home() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
         <header className="bg-white shadow-sm border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-            <div className="flex items-center justify-between">
+            {/* Mobile Layout */}
+            <div className="flex flex-col space-y-4 md:hidden">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Wallet className="w-6 h-6 text-primary-600" />
+                  <h1 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
+                    Expnse
+                  </h1>
+                </div>
+                <button
+                  onClick={logout}
+                  className="flex items-center space-x-1 px-3 py-1.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm"
+                  title="Logout"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="font-medium">Logout</span>
+                </button>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-gray-600">Hi, <span className="font-semibold">{username}</span></span>
+                <nav className="flex space-x-1">
+                  <button
+                    onClick={() => setActiveTab('dashboard')}
+                    className={`px-3 py-1.5 rounded-lg font-medium transition-colors text-sm ${
+                      activeTab === 'dashboard'
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    Dashboard
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('expenses')}
+                    className={`px-3 py-1.5 rounded-lg font-medium transition-colors text-sm ${
+                      activeTab === 'expenses'
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    Expenses
+                  </button>
+                  <button
+                    onClick={() => setActiveTab('settings')}
+                    className={`px-3 py-1.5 rounded-lg font-medium transition-colors ${
+                      activeTab === 'settings'
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Settings className="w-4 h-4" />
+                  </button>
+                </nav>
+              </div>
+            </div>
+
+            {/* Desktop Layout */}
+            <div className="hidden md:flex items-center justify-between">
               <div className="flex items-center space-x-3">
                 <Wallet className="w-8 h-8 text-primary-600" />
                 <h1 className="text-3xl font-bold bg-gradient-to-r from-primary-600 to-purple-600 bg-clip-text text-transparent">
