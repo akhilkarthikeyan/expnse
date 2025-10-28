@@ -7,9 +7,9 @@ let db: any;
 let sql: any;
 
 if (isProduction) {
-  // Use Vercel Postgres in production
-  const vercelPostgres = require('@vercel/postgres');
-  sql = vercelPostgres.sql;
+  // Use Neon Postgres in production (compatible with @vercel/postgres)
+  const { neon } = require('@neondatabase/serverless');
+  sql = neon(process.env.DATABASE_URL!);
 } else {
   // Use SQLite for local development
   const Database = require('better-sqlite3');
@@ -124,7 +124,7 @@ export const userDb = {
         VALUES (${username}, ${hashedPassword}) 
         RETURNING id
       `;
-      return result.rows[0].id;
+      return result[0].id;
     } else {
       const stmt = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)');
       const info = stmt.run(username, hashedPassword);
@@ -137,7 +137,7 @@ export const userDb = {
       const result = await sql`
         SELECT * FROM users WHERE username = ${username}
       `;
-      return result.rows[0] as { id: number; username: string; password: string } | undefined;
+      return result[0] as { id: number; username: string; password: string } | undefined;
     } else {
       const stmt = db.prepare('SELECT * FROM users WHERE username = ?');
       return stmt.get(username) as { id: number; username: string; password: string } | undefined;
@@ -149,7 +149,7 @@ export const userDb = {
       const result = await sql`
         SELECT * FROM users WHERE id = ${userId}
       `;
-      return result.rows[0] as { id: number; username: string; password: string } | undefined;
+      return result[0] as { id: number; username: string; password: string } | undefined;
     } else {
       const stmt = db.prepare('SELECT * FROM users WHERE id = ?');
       return stmt.get(userId) as { id: number; username: string; password: string } | undefined;
@@ -181,7 +181,7 @@ export const expenseDb = {
       const result = await sql`
         SELECT * FROM expenses WHERE user_id = ${userId} ORDER BY date DESC
       `;
-      return result.rows;
+      return result;
     } else {
       const stmt = db.prepare('SELECT * FROM expenses WHERE user_id = ? ORDER BY date DESC');
       return stmt.all(userId);
@@ -222,7 +222,7 @@ export const categoryDb = {
       const result = await sql`
         SELECT * FROM categories WHERE user_id = ${userId}
       `;
-      return result.rows;
+      return result;
     } else {
       const stmt = db.prepare('SELECT * FROM categories WHERE user_id = ?');
       return stmt.all(userId);
@@ -260,7 +260,7 @@ export const settingsDb = {
       const result = await sql`
         SELECT * FROM user_settings WHERE user_id = ${userId}
       `;
-      return result.rows[0];
+      return result[0];
     } else {
       const stmt = db.prepare('SELECT * FROM user_settings WHERE user_id = ?');
       return stmt.get(userId);
